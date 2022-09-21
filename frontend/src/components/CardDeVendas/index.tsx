@@ -24,6 +24,7 @@ function CardDeVendas() {
         const dMin = minData.toISOString().slice(0, 10);
         const dMax = maxData.toISOString().slice(0, 10);
 
+        console.log(BASE_URL);
         axios.get(`${BASE_URL}/vendas/page?dataMin=${dMin}&dataMax=${dMax}`)
             .then(response => {
             setVendas(response.data.content);
