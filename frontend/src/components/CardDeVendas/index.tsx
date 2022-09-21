@@ -24,7 +24,6 @@ function CardDeVendas() {
         const dMin = minData.toISOString().slice(0, 10);
         const dMax = maxData.toISOString().slice(0, 10);
 
-        console.log(BASE_URL);
         axios.get(`${BASE_URL}/vendas/page?dataMin=${dMin}&dataMax=${dMax}`)
             .then(response => {
             setVendas(response.data.content);
@@ -35,7 +34,7 @@ function CardDeVendas() {
 
     return (
            <div className="dsmeta-card">
-                <h2 className="dsmeta-sales-title">${BASE_URL}</h2>
+                <h2 className="dsmeta-sales-title">Vendas</h2>
                 <div>
                     <div className="dsmeta-form-control-container">
                         <DatePicker
