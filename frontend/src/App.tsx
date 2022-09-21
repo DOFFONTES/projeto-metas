@@ -1,11 +1,13 @@
-import BotaoDeNotificacao from "./components/BotaoDeNotificacao";
 import Cabecalho from "./components/Cabecalho";
 import CardDeVendas from "./components/CardDeVendas";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
   return (
       <>
+          <ToastContainer />
           <Cabecalho/>
           <main>
               <section id="vendas">

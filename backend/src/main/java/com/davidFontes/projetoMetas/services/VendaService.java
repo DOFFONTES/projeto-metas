@@ -33,7 +33,7 @@ public class VendaService {
 
 		LocalDate hoje = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
 
-		LocalDate dataMin = min.equals("") ? hoje.minusYears(1) : LocalDate.parse(max);
+		LocalDate dataMin = min.equals("") ? hoje.minusDays(365) : LocalDate.parse(min);
 		LocalDate dataMax = max.equals("") ? hoje : LocalDate.parse(max);
 
 		System.out.println(dataMin);

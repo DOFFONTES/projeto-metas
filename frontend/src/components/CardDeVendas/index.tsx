@@ -1,27 +1,46 @@
-
-import logo from "../../assets/img/logo.svg";
-
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ptBR } from "date-fns/locale";
 
 import "./styles.css";
 import BotaoDeNotificacao from "../BotaoDeNotificacao";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {BASE_URL} from "../../utils/request";
+import {Venda} from "../../models/venda";
 
 function CardDeVendas() {
 
-    const [dataInicio, setDataInicio] = useState(new Date(new Date().setDate(new Date().getDate() - 365)));
-    const [dataFim, setDateFim] = useState(new Date());
-       return (
+    const min = new Date(new Date().setDate(new Date().getDate() - 365));
+    const max = new Date();
+
+    const [minData, setMinData] = useState(min);
+    const [maxData, setMaxData] = useState(max);
+
+    const [vendas, setVendas] = useState<Venda[]>([]);
+
+    useEffect(() => {
+
+        const dMin = minData.toISOString().slice(0, 10);
+        const dMax = maxData.toISOString().slice(0, 10);
+
+        axios.get(`${BASE_URL}/vendas/page?dataMin=${dMin}&dataMax=${dMax}`)
+            .then(response => {
+            setVendas(response.data.content);
+
+        });
+
+    }, [minData, maxData]);
+
+    return (
            <div className="dsmeta-card">
                 <h2 className="dsmeta-sales-title">Vendas</h2>
                 <div>
                     <div className="dsmeta-form-control-container">
                         <DatePicker
                             locale={ptBR}
-                            selected={dataInicio}
-                            onChange={(date: Date) => setDataInicio(date)}
+                            selected={minData}
+                            onChange={(date: Date) => setMinData(date)}
                             className="dsmeta-form-control"
                             dateFormat="dd/MM/yyyy"
 
@@ -30,8 +49,8 @@ function CardDeVendas() {
                     <div className="dsmeta-form-control-container">
                         <DatePicker
                             locale={ptBR}
-                            selected={dataFim}
-                            onChange={(date: Date) => setDateFim(date)}
+                            selected={maxData}
+                            onChange={(date: Date) => setMaxData(date)}
                             className="dsmeta-form-control"
                             dateFormat="dd/MM/yyyy"
                         />
@@ -52,53 +71,25 @@ function CardDeVendas() {
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td className="show992">#341</td>
-                            <td className="show576">08/07/2022</td>
-                            <td>Anakin</td>
-                            <td className="show992">15</td>
-                            <td className="show992">11</td>
-                            <td>R$ 55300.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <div className="dsmeta-red-btn">
-                                        <BotaoDeNotificacao />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">#341</td>
-                            <td className="show576">08/07/2022</td>
-                            <td>Anakin</td>
-                            <td className="show992">15</td>
-                            <td className="show992">11</td>
-                            <td>R$ 55300.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <div className="dsmeta-red-btn">
-                                        <BotaoDeNotificacao />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">#341</td>
-                            <td className="show576">08/07/2022</td>
-                            <td>Anakin</td>
-                            <td className="show992">15</td>
-                            <td className="show992">11</td>
-                            <td>R$ 55300.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <div className="dsmeta-red-btn">
-                                        <BotaoDeNotificacao />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                        {vendas.map(obj => (
+                                <tr key={obj.id}>
+                                    <td className="show992">{obj.id}</td>
+                                    <td className="show576">{obj.data}</td>
+                                    <td>{obj.vendedor}</td>
+                                    <td className="show992">{obj.visita}</td>
+                                    <td className="show992">{obj.vendas}</td>
+                                    <td>R$ {obj.total},00</td>
+                                    <td>
+                                        <div className="dsmeta-red-btn-container">
+                                            <div className="dsmeta-red-btn">
+                                                <BotaoDeNotificacao vendaId={obj.id}/>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        )}
                         </tbody>
-
                     </table>
                 </div>
 
