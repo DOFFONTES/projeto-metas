@@ -33,11 +33,9 @@ function CardDeVendas() {
 
     }, [minData, maxData]);
 
-    const teste2 = BASE_URL;
-
     return (
            <div className="dsmeta-card">
-                <h2 className="dsmeta-sales-title">BASE_URL</h2>
+                <h2 className="dsmeta-sales-title">${BASE_URL}</h2>
                 <div>
                     <div className="dsmeta-form-control-container">
                         <DatePicker
